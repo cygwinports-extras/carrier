@@ -1,0 +1,47 @@
+--- origsrc/carrier-2.4.3/libpurple/dnsquery.c	2008-05-11 23:13:20.000000000 -0500
++++ src/carrier-2.4.3/libpurple/dnsquery.c	2008-08-06 16:16:56.359375000 -0500
+@@ -47,7 +47,7 @@
+ 	gpointer data;
+ 	guint timeout;
+ 
+-#if defined(__unix__) || defined(__APPLE__)
++#if (defined(__unix__) && !defined(__CYGWIN__)) || defined(__APPLE__)
+ 	PurpleDnsQueryResolverProcess *resolver;
+ #elif defined _WIN32 /* end __unix__ || __APPLE__ */
+ 	GThread *resolver;
+@@ -56,7 +56,7 @@
+ #endif
+ };
+ 
+-#if defined(__unix__) || defined(__APPLE__)
++#if (defined(__unix__) && !defined(__CYGWIN__)) || defined(__APPLE__)
+ 
+ #define MAX_DNS_CHILDREN 4
+ 
+@@ -131,7 +131,7 @@
+ 	return FALSE;
+ }
+ 
+-#if defined(__unix__) || defined(__APPLE__)
++#if (defined(__unix__) && !defined(__CYGWIN__)) || defined(__APPLE__)
+ 
+ /*
+  * Unix!
+@@ -907,7 +907,7 @@
+ 	if (ops && ops->destroy)
+ 		ops->destroy(query_data);
+ 
+-#if defined(__unix__) || defined(__APPLE__)
++#if (defined(__unix__) && !defined(__CYGWIN__)) || defined(__APPLE__)
+ 	queued_requests = g_slist_remove(queued_requests, query_data);
+ 
+ 	if (query_data->resolver != NULL)
+@@ -987,7 +987,7 @@
+ void
+ purple_dnsquery_uninit(void)
+ {
+-#if defined(__unix__) || defined(__APPLE__)
++#if (defined(__unix__) && !defined(__CYGWIN__)) || defined(__APPLE__)
+ 	while (free_dns_children != NULL)
+ 	{
+ 		purple_dnsquery_resolver_destroy(free_dns_children->data);
